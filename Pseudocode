@@ -1,0 +1,37 @@
+HybridSort(arr, low, high):
+    if high - low <= THRESHOLD:  # Small subarray → Insertion Sort
+        InsertionSort(arr, low, high)
+    else:
+        pivot = Partition(arr, low, high)  # QuickSort partition
+        HybridSort(arr, low, pivot - 1)
+        HybridSort(arr, pivot + 1, high)
+
+InsertionSort(arr, low, high):
+    for i from low + 1 to high:
+        key = arr[i]
+        j = i - 1
+        while j >= low and arr[j] > key:
+            arr[j + 1] = arr[j]
+            j = j - 1
+        arr[j + 1] = key
+
+Partition(arr, low, high):
+    pivot = MedianOfThree(arr, low, high)  # Optimized pivot selection
+    swap arr[pivot] and arr[high]
+    i = low - 1
+    for j from low to high - 1:
+        if arr[j] <= arr[high]:
+            i = i + 1
+            swap arr[i] and arr[j]
+    swap arr[i + 1] and arr[high]
+    return i + 1
+
+MedianOfThree(arr, low, high):
+    mid = low + (high - low) // 2
+    if arr[mid] < arr[low]:
+        swap arr[low] and arr[mid]
+    if arr[high] < arr[low]:
+        swap arr[low] and arr[high]
+    if arr[mid] < arr[high]:
+        swap arr[mid] and arr[high]
+    return high  # Pivot is now at 'high'
